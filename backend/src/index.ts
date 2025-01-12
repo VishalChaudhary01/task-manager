@@ -4,6 +4,8 @@ import express from 'express';
 import { connectToDB } from './config/db';
 
 import userRoutes from './routes/user.routes';
+import taskRouter from './routes/task.routes';
+import { isAuth } from './middlewares/auth';
 
 const app = express();
 connectToDB();
@@ -11,6 +13,7 @@ connectToDB();
 app.use(express.json());
 
 app.use('/api/user', userRoutes);
+app.use('/api/tasks', isAuth, taskRouter);
 
 app.get('/', (req, res) => {
      res.send('Healthy server');
