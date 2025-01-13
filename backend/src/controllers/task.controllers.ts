@@ -11,7 +11,7 @@ export const createTask = async (req: AuthRequest, res: Response) => {
                return;
           }
           const { title, description } = validatedInput.data;
-          const isAlready = await Task.findOne({ title });
+          const isAlready = await Task.findOne({ userId: req.id, title });
           if (isAlready) {
                res.status(400).json({ success: false, message: 'Task with given title is already present' });
                return;

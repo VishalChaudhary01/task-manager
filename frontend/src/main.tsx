@@ -5,13 +5,16 @@ import App from './App.tsx'
 import { AuthProvider } from './context/auth.provider.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'sonner'
+import { TaskProvider } from './context/task.provider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Toaster position="bottom-right" richColors />
-        <App />
+        <TaskProvider>
+          <Toaster position="bottom-right" richColors />
+          <App />
+        </TaskProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
