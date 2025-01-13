@@ -1,22 +1,11 @@
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { signin, signup } from "@/api/auth.api";
 import { SigninType, SignupType } from "@/types/user.type";
 import { isTokenValid } from "@/utils";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-interface IAuthProvider {
-  children: React.ReactNode;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  handleSignup: (values: SignupType) => Promise<void>;
-  handleSignin: (values: SigninType) => Promise<void>;
-  handleLogout: () => void;
-}
-
-const AuthContext = React.createContext<AuthContextType | null>(null);
+const AuthContext = React.createContext<IAuthContext | null>(null);
 
 export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   const navigate = useNavigate();
@@ -35,10 +24,11 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 
   async function handleSignup(values: SignupType) {
     try {
-      const res = await signup(values);
-      if (res.data.success && res.data.token) {
-        localStorage.setItem("userInfo", JSON.stringify(res.data.token));
-        toast.success(res.data.message || "Signup successful");
+      const { data } = await signup(values);
+      if (data.success && data.token) {
+        localStorage.setItem("userInfo", JSON.stringify(data.token));
+        setIsAuthenticated(true);
+        toast.success(data.message || "Signup successful");
         navigate("/");
       }
     } catch (error: any) {
@@ -49,10 +39,11 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 
   async function handleSignin(values: SigninType) {
     try {
-      const res = await signin(values);
-      if (res.data.success && res.data.token) {
-        localStorage.setItem("userInfo", JSON.stringify(res.data.token));
-        toast.success(res.data.message || "Signin successful");
+      const { data } = await signin(values);
+      if (data.success && data.token) {
+        localStorage.setItem("userInfo", data.token);
+        setIsAuthenticated(true);
+        toast.success(data.message || "Signin successful");
         navigate("/");
       }
     } catch (error: any) {
@@ -69,9 +60,7 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, handleSignup, handleSignin, handleLogout }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, handleSignup, handleSignin, handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

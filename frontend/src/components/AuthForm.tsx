@@ -24,12 +24,11 @@ export const AuthForm = () => {
     },
   });
  
-  function onSubmit(values: SignupType | SigninType) {
+  async function onSubmit(values: SignupType | SigninType) {
     if (authAction === "signup") {
-      handleSignup(values as SignupType);
-    } else if (authAction === "signin") {
-      console.log("signin clicked");
-      handleSignin(values as SigninType);
+      await handleSignup(values as SignupType);
+    } else {
+      await handleSignin(values as SigninType);
     }
   };
   
