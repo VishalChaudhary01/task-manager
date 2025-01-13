@@ -1,10 +1,14 @@
-import { Button } from "./components/ui/button";
+import { Routes, Route } from 'react-router-dom';
+import { HomePage } from "./pages/home";
+import { SigninPage } from "./pages/signin";
+import { SignupPage } from "./pages/signup";
 
 export default function App() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold">Hi there</h1>
-      <Button>Click me</Button>
-    </div>
+    <Routes>
+      <Route path="/" element={ <HomePage /> } />
+      <Route path="/signin" element={ <SigninPage /> } />
+      <Route path="/signup" element={ <SignupPage /> } />
+    </Routes>
   )
 }
